@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in - Okta</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white; padding: 40px 30px;
+            border: 1px solid #ddd; border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 100%; max-width: 360px;
+        }
+        .logo { text-align: center; margin-bottom: 30px; }
+        .logo img { height: 40px; }
+        .logo-text { font-size: 24px; font-weight: 700; color: #007dc1; }
+        h1 { font-size: 20px; margin-bottom: 24px; color: #1d1d1d; }
+        input {
+            width: 100%; padding: 10px 12px; margin-bottom: 16px;
+            border: 1px solid #aaa; border-radius: 4px;
+            font-size: 14px;
+        }
+        input:focus { outline: none; border-color: #007dc1; }
+        .btn {
+            width: 100%; background: #007dc1; color: white; border: none;
+            padding: 12px; font-size: 14px; font-weight: 500;
+            border-radius: 4px; cursor: pointer;
+        }
+        .btn:hover { background: #00629e; }
+        .help { margin-top: 16px; text-align: center; font-size: 13px; }
+        .help a { color: #007dc1; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-text">okta</div>
+        </div>
+        <h1>Sign In</h1>
+        <form id="login-form" method="POST" action="/login">
+            <input type="text" name="username" placeholder="Username" required autofocus>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        <div class="help">
+            <a href="#">Need help signing in?</a>
+        </div>
+    </div>
+</body>
+</html>
