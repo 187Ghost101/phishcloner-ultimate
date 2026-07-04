@@ -1,0 +1,251 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-06-30",
+  "author": "ghost1o1",
+  "count": 20,
+  "templates": {
+    "microsoft": {
+      "name": "Microsoft 365 / Azure AD",
+      "url": "https://login.microsoftonline.com",
+      "category": "idp",
+      "difficulty": "medium",
+      "mfa_provider": "microsoft_authenticator",
+      "selectors": {
+        "username": "input[name='loginfmt'], input[type='email']",
+        "password": "input[name='passwd'], input[type='password']",
+        "submit": "input[type='submit'], #idSIButton9",
+        "mfa_code": "input[name='otc'], #idTxtBx_SAOTCC_OTC",
+        "mfa_submit": "#idSubmit_SAOTCC_Continue"
+      }
+    },
+    "google": {
+      "name": "Google Workspace",
+      "url": "https://accounts.google.com/signin",
+      "category": "idp",
+      "difficulty": "hard",
+      "mfa_provider": "google_prompt",
+      "selectors": {
+        "username": "input[type='email']",
+        "password": "input[type='password']",
+        "submit": "#identifierNext, #passwordNext",
+        "mfa_code": "input[type='tel']"
+      }
+    },
+    "okta": {
+      "name": "Okta SSO",
+      "url": "*.okta.com",
+      "category": "idp",
+      "difficulty": "medium",
+      "mfa_provider": "okta_verify",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='password']",
+        "submit": "input[type='submit']",
+        "mfa_code": "input[name='credentials.passcode']"
+      }
+    },
+    "duo": {
+      "name": "Duo Security",
+      "url": "*.duosecurity.com",
+      "category": "idp",
+      "difficulty": "hard",
+      "mfa_provider": "duo_push",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='password']",
+        "submit": "button[type='submit']"
+      }
+    },
+    "github": {
+      "name": "GitHub",
+      "url": "https://github.com/login",
+      "category": "dev",
+      "difficulty": "easy",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='login']",
+        "password": "input[name='password']",
+        "submit": "input[type='submit']",
+        "mfa_code": "input[name='app_otp']"
+      }
+    },
+    "gitlab": {
+      "name": "GitLab",
+      "url": "https://gitlab.com/users/sign_in",
+      "category": "dev",
+      "difficulty": "easy",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='user[login]']",
+        "password": "input[name='user[password]']",
+        "submit": "input[type='submit']"
+      }
+    },
+    "aws": {
+      "name": "AWS Console",
+      "url": "https://signin.aws.amazon.com",
+      "category": "cloud",
+      "difficulty": "medium",
+      "mfa_provider": "virtual_mfa",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='password']",
+        "submit": "#signin_button",
+        "mfa_code": "input[name='mfacode']"
+      }
+    },
+    "azure": {
+      "name": "Azure Portal",
+      "url": "https://portal.azure.com",
+      "category": "cloud",
+      "difficulty": "medium",
+      "mfa_provider": "microsoft_authenticator",
+      "redirects_to": "microsoft"
+    },
+    "salesforce": {
+      "name": "Salesforce",
+      "url": "https://login.salesforce.com",
+      "category": "enterprise",
+      "difficulty": "easy",
+      "mfa_provider": "salesforce_authenticator",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='pw']",
+        "submit": "input[name='Login']"
+      }
+    },
+    "servicenow": {
+      "name": "ServiceNow",
+      "url": "*.service-now.com",
+      "category": "enterprise",
+      "difficulty": "easy",
+      "mfa_provider": "none",
+      "selectors": {
+        "username": "input[name='user_name']",
+        "password": "input[name='user_password']",
+        "submit": "#sysverb_login"
+      }
+    },
+    "workday": {
+      "name": "Workday",
+      "url": "*.workday.com",
+      "category": "enterprise",
+      "difficulty": "hard",
+      "mfa_provider": "duo_push",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='password']",
+        "submit": "button[type='submit']"
+      }
+    },
+    "dropbox": {
+      "name": "Dropbox Business",
+      "url": "https://www.dropbox.com/login",
+      "category": "saas",
+      "difficulty": "easy",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='login_email']",
+        "password": "input[name='login_password']",
+        "submit": "button[type='submit']"
+      }
+    },
+    "slack": {
+      "name": "Slack",
+      "url": "https://slack.com/signin",
+      "category": "saas",
+      "difficulty": "easy",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='email']",
+        "password": "input[name='password']",
+        "submit": "#signin_btn"
+      }
+    },
+    "apple": {
+      "name": "Apple ID",
+      "url": "https://appleid.apple.com",
+      "category": "consumer",
+      "difficulty": "hard",
+      "mfa_provider": "apple_trusted_device",
+      "selectors": {
+        "username": "input[name='accountName']",
+        "password": "input[name='password']",
+        "submit": "#sign-in"
+      }
+    },
+    "fortigate": {
+      "name": "FortiGate SSL VPN",
+      "url": "*/remote/login",
+      "category": "vpn",
+      "difficulty": "easy",
+      "mfa_provider": "fortitoken",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='credential']",
+        "submit": "button[type='submit']",
+        "mfa_code": "input[name='code']"
+      }
+    },
+    "cisco_anyconnect": {
+      "name": "Cisco AnyConnect",
+      "url": "*/+CSCOE+/logon.html",
+      "category": "vpn",
+      "difficulty": "easy",
+      "mfa_provider": "duo_push",
+      "selectors": {
+        "username": "input[name='username']",
+        "password": "input[name='password']",
+        "submit": "input[name='Login']"
+      }
+    },
+    "citrix": {
+      "name": "Citrix Gateway",
+      "url": "*/logon/LogonPoint/",
+      "category": "vpn",
+      "difficulty": "medium",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='login']",
+        "password": "input[name='passwd']",
+        "submit": "input[type='submit']"
+      }
+    },
+    "paloalto": {
+      "name": "Palo Alto GlobalProtect",
+      "url": "*/global-protect/login.esp",
+      "category": "vpn",
+      "difficulty": "medium",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='user']",
+        "password": "input[name='passwd']",
+        "submit": "input[type='submit']"
+      }
+    },
+    "facebook": {
+      "name": "Facebook Business",
+      "url": "https://www.facebook.com/login",
+      "category": "social",
+      "difficulty": "easy",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='email']",
+        "password": "input[name='pass']",
+        "submit": "button[name='login']"
+      }
+    },
+    "linkedin": {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/login",
+      "category": "social",
+      "difficulty": "easy",
+      "mfa_provider": "totp",
+      "selectors": {
+        "username": "input[name='session_key']",
+        "password": "input[name='session_password']",
+        "submit": "button[type='submit']"
+      }
+    }
+  }
+}
