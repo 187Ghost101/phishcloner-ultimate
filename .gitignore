@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.apk
+*.aab
+*.exe
+*.dll
+*.lib
+*.spec
+
+# Sensitive / Session data
+certs/*.pem
+certs/*.key
+phish_sessions/
+phish_screenshots/
+phish_exfil/
+c2_data/
+data/targets.csv
+data/email_lists/
+data/domain_lists/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+*.lnk
+*.ini
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Docker
+docker-compose.override.yml
+.dockerignore
