@@ -1,109 +1,114 @@
-# 🎣 PhishCloner Ultimate v3.0 — C2 Nocturne
-
-> **"There is no lock."** — **ghost1o1**
-
-Framework **AiTM (Adversary-in-the-Middle) phishing** : 20 brand templates, 9 engine modules, MITM proxy + TLS spoofing + MFA relay + exfil. 100% Docker-ready, 0 CDN, 0 télémétrie.
+<div align="center">
 
 ```
-PhishCloner Ultimate v3.0
-   ╔═══════════════════════════════════════╗
-   ║  20 BRANDS · 9 ENGINES · C2 NOCTURNE ║
-   ║  TLS SPOOF · MFA RELAY · C2 + WS      ║
-   ╚═══════════════════════════════════════╝
+   ▄█████ █  ██  ▄█████ ▄█████▄  ██   ██ ▄█████ █    ██  ██ ██    ██
+  ██      ██▄██  ██     ██   ██  ██▄▄▄██ ██     ██    ██  ██ ██    ██
+  ██  ███ ██▀██  █████  ██████   ██   ██ █████  ██    ██  ██ ██    ██
+  ██   ██ ██  ██ ██     ██   ██  ██   ██ ██      ██  ▄██  ██  ██  ██
+   ▀████▀ ██  ██ ▀█████ ██   ██  ██   ██ ▀█████   ▀███▀██▄██  ▀███▀
 ```
 
-## ⚡ Aperçu
+![GHOST1O1](https://img.shields.io/badge/GHOST1O1-NOCTURNE-e63946?style=for-the-badge&logo=ghost&logoColor=white)
+![Version](https://img.shields.io/badge/VERSION-1.0.0-00d4ff?style=for-the-badge)
+![Status](https://img.shields.io/badge/STATUS-OPERATIONAL-2ecc71?style=for-the-badge)
+![Modules](https://img.shields.io/badge/MODULES-9-9b59b6?style=for-the-badge)
 
-| Spec | Valeur |
-|------|--------|
-| **Version** | 3.0 "C2 Nocturne" |
-| **Dashboard** | 32 KB (single-file HTML) |
-| **Engine** | 9 modules Python (2206 lignes) |
-| **Templates** | 20 brands (M365, Google, Okta, GitHub, AWS, Azure, LinkedIn, etc.) |
-| **Dépendances** | Python 3.12+ · Docker optionnel |
-| **CDN** | 0 (brand layer 100% locale) |
-| **Télémétrie** | 0 |
+# 🎣 PhishCloner Ultimate
+## *Adversary-in-the-Middle Phishing Framework*
 
-## 🎯 9 engine modules
+**9 modules d'attaque · 20 templates · C2 intégré · Termux/APK/EXE**
 
-1. **TLS Spoofer** — génération de certs fake on-the-fly
-2. **MITM Proxy** — reverse proxy AiTM interception HTTP/HTTPS
-3. **MFA Relay** — relay temps réel des codes MFA
-4. **Cred Validator** — auto-test des creds capturées
-5. **Exfil Engine** — exfiltration async disk + network
-6. **Delivery** — SMS / email / QR delivery
-7. **Proxy Pool** — rotation d'IPs de sortie
-8. **Reporter** — génération rapport PDF + HTML
-9. **Template Loader** — hot-swap brand templates
+</div>
 
-## 🎯 20 brand templates
+---
 
-`microsoft` · `google` · `okta` · `github` · `gitlab` · `aws` · `azure` · `linkedin` · `facebook` · `slack` · `duo` · `salesforce` · `servicenow` · `dropbox` · `cisco_anyconnect` · `citrix` · `fortigate` · `paloalto` · `apple` · `manifest`
+## 🔥 C'est quoi ?
 
-## 📦 Installation
+PhishCloner Ultimate est un framework **AiTM (Adversary-in-the-Middle)** modulaire pour la simulation d'attaques phishing. Conçu pour :
 
-Voir [INSTALL.md](INSTALL.md).
+- **Red Team** : campagnes de simulation réalistes
+- **Blue Team** : formation et détection
+- **Recherche** : analyse des flux d'auth modernes (OAuth, MFA, SAML)
 
-Quick start :
+**Architecture en 9 modules :**
+
+| Module | Rôle |
+|--------|------|
+| `mitm_proxy.py` | Proxy HTTPS intercepteur |
+| `cred_validator.py` | Test live des credentials |
+| `delivery.py` | SMTP/SMS/WhatsApp delivery |
+| `cloner.py` | Clone de pages login |
+| `c2_server.py` | Command & Control |
+| `session_mgr.py` | Gestion sessions compromises |
+| `report.py` | Rapports & stats |
+| `evasion.py` | Anti-détection (UA, TLS fingerprint) |
+| `api.py` | API REST pour orchestration |
+
+---
+
+## ✨ Features
+
+- 🎯 **20 templates** : Microsoft 365, Google, Okta, GitHub, Facebook, LinkedIn, etc.
+- 🔐 **OAuth bypass** : interception des flux modernes
+- 📱 **Multi-canal** : Email, SMS, WhatsApp, QR code
+- 🛡️ **Anti-détection** : UA rotation, TLS fingerprint mimicry
+- 📊 **Dashboard C2** : visualisation temps réel
+- 🐳 **Docker ready** : déploiement containerisé
+- 📱 **APK & EXE** : payloads Android & Windows
+- 🐧 **Termux natif** : depuis ton cell
+
+---
+
+## 🚀 Démarrage 60 secondes
+
 ```bash
 git clone https://github.com/187Ghost101/phishcloner-ultimate.git
 cd phishcloner-ultimate
-chmod +x setup.sh
-./setup.sh
-# Lancer dashboard
-python3 -m http.server 8090 --directory .
-# Ouvre http://localhost:8090/c2_admin.html
-```
-
-## 📖 Utilisation
-
-Voir [USAGE.md](USAGE.md).
-
-### Workflow red team
-1. Cible : `https://login.microsoftonline.com/`
-2. Brand : `microsoft`
-3. LHOST : `0.0.0.0` / LPORT : `8443`
-4. Deploy → victime reçoit URL phishing
-5. Creds + tokens capturés
-6. MFA relay live
-7. Export rapport JSON/HTML
-
-## 🔒 Usage autorisé uniquement
-
-⚠️ **AVERTISSEMENT** : PhishCloner Ultimate est destiné aux **red team autorisés** et **adversary simulation sous scope écrit et autorisation explicite**. Le phishing non-autorisé est **illégal** et passible de poursuites.
-
-## 📂 Structure
-
-```
-phishcloner-ultimate/
-├── c2_admin.html          # 32 KB — C2 Nocturne dashboard
-├── ghost1o1.{css,js}      # design system
-├── engine/                # 9 modules Python
-│   ├── tls_spoofer.py
-│   ├── mitm_proxy.py
-│   ├── mfa_relay.py
-│   ├── cred_validator.py
-│   ├── exfil.py
-│   ├── delivery.py
-│   ├── proxy_pool.py
-│   ├── reporter.py
-│   └── template_loader.py
-├── templates/             # 20 brand templates
-│   ├── microsoft/
-│   ├── google/
-│   ├── okta/
-│   └── ... (17 autres)
-├── Dockerfile             # Docker build
-├── docker-compose.yml     # orchestration
-├── Makefile               # build/test/deploy
-├── requirements.txt       # Python deps
-├── setup.sh               # installateur
-├── README.md
-├── INSTALL.md
-├── USAGE.md
-└── GHOST1O1_BRAND.md
+bash setup.sh
+python3 engine/api.py 8443
+firefox http://localhost:8443/dashboard
 ```
 
 ---
 
-**© 2026 ghost1o1 · GHOST1O1 Nocturne v1.1**
+## ⚠️ Éthique
+
+**PhishCloner est STRICTEMENT destiné à :**
+- Tests autorisés sur tes propres systèmes
+- Campagnes Red Team avec **autorisation écrite**
+- Formation Blue Team
+- Recherche en sécurité
+
+**Toute utilisation non autorisée est ILLÉGALE.** Tu es seul responsable.
+
+---
+
+## 📚 Documentation
+
+- **[INSTALL.md](INSTALL.md)** — Installation par OS
+- **[USAGE.md](USAGE.md)** — Exemples d'usage
+- **[SECURITY.md](SECURITY.md)** — Disclosure & éthique
+- **[CHANGELOG.md](CHANGELOG.md)** — Historique
+
+---
+
+## 🔗 Liens
+
+- **Hub GHOST1O1** : [github.com/187Ghost101/ghost1o1](https://github.com/187Ghost101/ghost1o1)
+- **Protocole** : [PROTOCOL.md](https://github.com/187Ghost101/ghost1o1/blob/main/PROTOCOL.md)
+
+---
+
+## 📜 Licence
+
+MIT — voir [LICENSE](LICENSE)
+
+---
+
+<div align="center">
+
+### Forged in the dark by [ghost1o1](https://github.com/187Ghost101) — 2026
+
+*"There is no lock."*
+
+</div>
